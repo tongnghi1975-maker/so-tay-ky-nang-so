@@ -1,0 +1,1926 @@
+<!--
+  ============================================================
+  SỔ TAY KIẾN THỨC, KỸ NĂNG SỐ CƠ BẢN
+  Bệnh viện Tim mạch An Giang
+  Theo Quyết định số 757/QĐ-BKHCN và Chỉ thị số 14/CT-TTg
+
+  © Bản quyền thuộc Bệnh viện Tim mạch An Giang.
+  Thiết kế & phát triển: KS. Tống Hoàng Khang Nghi
+
+  Tài liệu và mã nguồn này được xây dựng phục vụ công tác phổ cập
+  kiến thức, kỹ năng số nội bộ. Nghiêm cấm sao chép, chỉnh sửa nội
+  dung, hoặc phát hành lại dưới danh nghĩa khác khi chưa được phép
+  của Bệnh viện Tim mạch An Giang và tác giả.
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sổ tay Kỹ năng số · Bệnh viện Tim mạch An Giang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B3954;
+  --navy-deep:#082940;
+  --teal:#1E6E8C;
+  --mint:#5BA8A0;
+  --paper:#F5F7F8;
+  --paper-warm:#EEF2F3;
+  --ink:#22303A;
+  --ink-soft:#5A6B75;
+  --line:#D8E0E3;
+  --red:#C0392B;
+  --card:#FFFFFF;
+  --radius:14px;
+  --shadow:0 2px 14px rgba(11,57,84,0.08);
+  --shadow-lg:0 12px 40px rgba(11,57,84,0.16);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,.serif{font-family:'Lora',Georgia,serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+
+/* ===== ECG SIGNATURE LINE ===== */
+.ecg-wrap{
+  position:relative;
+  height:34px;
+  overflow:hidden;
+  background:var(--navy-deep);
+}
+.ecg-svg{position:absolute;top:0;left:0;height:100%;width:200%;}
+.ecg-path{
+  fill:none;
+  stroke:var(--mint);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  filter:drop-shadow(0 0 3px rgba(91,168,160,0.6));
+}
+@keyframes ecgScroll{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+.ecg-animated{animation:ecgScroll 9s linear infinite;}
+@media (prefers-reduced-motion: reduce){.ecg-animated{animation:none;}}
+
+/* ===== LAYOUT ===== */
+.app{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  min-height:100vh;
+}
+@media (max-width:880px){
+  .app{grid-template-columns:1fr;}
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  background:var(--navy);
+  color:#EAF1F4;
+  padding:0;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
+@media (max-width:880px){
+  .sidebar{position:fixed;left:0;top:0;height:100%;width:280px;z-index:50;transform:translateX(-100%);transition:transform .28s ease;box-shadow:var(--shadow-lg);}
+  .sidebar.open{transform:translateX(0);}
+}
+.brand{
+  padding:24px 22px 18px;
+  border-bottom:1px solid rgba(255,255,255,0.12);
+}
+.brand-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--mint);
+  margin:0 0 6px;
+}
+.brand h1{
+  font-size:19px;
+  line-height:1.3;
+  margin:0 0 4px;
+  color:#fff;
+  font-weight:600;
+}
+.brand-sub{
+  font-size:12.5px;
+  color:#A9C2CC;
+  margin:0;
+}
+.nav-scroll{flex:1;overflow-y:auto;padding:14px 12px 24px;}
+.nav-group-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:#7FA0AC;
+  padding:14px 10px 6px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  text-align:left;
+  background:none;
+  border:none;
+  color:#D7E5E9;
+  font-family:'Inter',sans-serif;
+  font-size:13.5px;
+  padding:9px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:background .15s;
+  line-height:1.35;
+}
+.nav-item:hover{background:rgba(255,255,255,0.07);}
+.nav-item.active{background:var(--teal);color:#fff;font-weight:600;}
+.nav-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:#7FA0AC;
+  min-width:20px;
+}
+.nav-item.active .nav-num{color:#cdeae6;}
+.nav-progress{
+  margin-top:auto;
+  padding:16px 22px 22px;
+  border-top:1px solid rgba(255,255,255,0.12);
+}
+.progress-label{font-size:11.5px;color:#A9C2CC;margin-bottom:8px;display:flex;justify-content:space-between;}
+.progress-bar{height:6px;background:rgba(255,255,255,0.15);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--mint);border-radius:4px;transition:width .4s ease;}
+.app-credit{margin-top:14px;font-size:10.5px;color:#7FA0AC;line-height:1.5;}
+.app-credit b{color:#A9C2CC;}
+
+/* ===== MOBILE TOPBAR ===== */
+.topbar{
+  display:none;
+  align-items:center;
+  gap:12px;
+  padding:14px 16px;
+  background:var(--navy);
+  color:#fff;
+  position:sticky;
+  top:0;
+  z-index:40;
+}
+@media (max-width:880px){.topbar{display:flex;}}
+.menu-btn{
+  background:none;border:none;color:#fff;cursor:pointer;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;
+}
+.menu-btn:hover{background:rgba(255,255,255,0.1);}
+.topbar-title{font-family:'Lora',serif;font-size:15px;font-weight:600;}
+.overlay{
+  display:none;position:fixed;inset:0;background:rgba(8,30,45,0.5);z-index:45;
+}
+.overlay.show{display:block;}
+
+/* ===== MAIN CONTENT ===== */
+.main{padding:0;min-width:0;}
+.content{
+  max-width:760px;
+  margin:0 auto;
+  padding:44px 28px 100px;
+}
+@media (max-width:600px){.content{padding:28px 18px 80px;}}
+
+.page-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--teal);
+  margin:0 0 10px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.page-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--mint);}
+.content h2.page-title{
+  font-size:clamp(26px,4vw,34px);
+  line-height:1.2;
+  margin:0 0 18px;
+  color:var(--navy-deep);
+  font-weight:700;
+}
+.lead{
+  font-size:16px;
+  color:var(--ink-soft);
+  line-height:1.7;
+  margin:0 0 28px;
+  font-style:italic;
+  border-left:3px solid var(--mint);
+  padding-left:16px;
+}
+.body-text{font-size:15.5px;line-height:1.75;color:var(--ink);margin:0 0 16px;}
+.section-h{
+  font-size:18px;
+  font-weight:600;
+  color:var(--navy);
+  margin:30px 0 14px;
+  padding-bottom:8px;
+  border-bottom:2px solid var(--line);
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+}
+.section-h .num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--mint);}
+
+ul.bullets{list-style:none;margin:0 0 18px;padding:0;}
+ul.bullets li{
+  position:relative;
+  padding:6px 0 6px 22px;
+  font-size:15px;
+  line-height:1.65;
+  color:var(--ink);
+}
+ul.bullets li::before{
+  content:"";
+  position:absolute;left:2px;top:15px;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--teal);
+}
+
+/* competency group cards */
+.group-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px 24px;
+  margin:0 0 18px;
+  box-shadow:var(--shadow);
+}
+.group-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.group-num{
+  font-family:'Lora',serif;font-weight:700;font-size:20px;
+  width:38px;height:38px;border-radius:50%;
+  background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.group-title{font-family:'Lora',serif;font-weight:600;font-size:18px;color:var(--navy-deep);}
+.group-intro{font-size:14px;color:var(--ink-soft);font-style:italic;margin:0 0 12px;}
+
+/* cards/info boxes */
+.info-box{
+  background:var(--paper-warm);
+  border-left:3px solid var(--teal);
+  border-radius:0 10px 10px 0;
+  padding:16px 18px;
+  margin:18px 0;
+  font-size:14.5px;
+  line-height:1.65;
+}
+.info-box strong{color:var(--navy);}
+
+table.doc-table{width:100%;border-collapse:collapse;margin:18px 0 26px;font-size:14px;}
+table.doc-table th{
+  background:var(--navy);color:#fff;text-align:left;
+  padding:10px 14px;font-weight:600;font-size:12.5px;
+  letter-spacing:.02em;
+}
+table.doc-table td{padding:10px 14px;border-bottom:1px solid var(--line);}
+table.doc-table tr:last-child td{border-bottom:none;}
+table.doc-table tr:nth-child(even) td{background:var(--paper-warm);}
+
+/* ===== self-assessment ===== */
+.assess-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:16px;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+.assess-row:last-child{border-bottom:none;}
+.assess-label{font-size:14.5px;color:var(--ink);}
+.seg{display:flex;background:var(--paper-warm);border-radius:10px;padding:3px;gap:3px;}
+.seg button{
+  border:none;background:none;cursor:pointer;
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:600;
+  padding:7px 12px;border-radius:8px;color:var(--ink-soft);
+  white-space:nowrap;transition:all .15s;
+}
+.seg button.sel-0.active{background:#E8B4B0;color:#7a1f15;}
+.seg button.sel-1.active{background:#FCE7A2;color:#7a5a06;}
+.seg button.sel-2.active{background:#BFE3DC;color:#0e5c4f;}
+.assess-summary{
+  display:flex;justify-content:space-between;align-items:center;
+  margin:24px 0 8px;padding:16px 18px;
+  background:var(--navy);color:#fff;border-radius:12px;
+}
+.assess-summary .num{font-family:'Lora',serif;font-size:26px;font-weight:700;}
+.btn{
+  font-family:'Inter',sans-serif;font-weight:600;font-size:14px;
+  background:var(--teal);color:#fff;border:none;border-radius:10px;
+  padding:11px 22px;cursor:pointer;transition:background .15s, transform .1s;
+}
+.btn:hover{background:var(--navy);}
+.btn:active{transform:scale(0.98);}
+.btn.btn-outline{background:none;border:1.5px solid var(--teal);color:var(--teal);}
+.btn.btn-outline:hover{background:var(--teal);color:#fff;}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+
+/* ===== quiz ===== */
+.quiz-meta{
+  display:flex;gap:18px;flex-wrap:wrap;margin-bottom:22px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);
+}
+.quiz-meta span b{color:var(--navy);}
+.qcard{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:22px 24px;margin-bottom:16px;box-shadow:var(--shadow);
+  scroll-margin-top:90px;
+}
+.qcard .qnum{
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mint);
+  font-weight:600;margin-bottom:6px;display:block;
+}
+.qcard .qtext{font-size:15.5px;font-weight:600;color:var(--navy-deep);margin:0 0 14px;line-height:1.5;}
+.opt{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);
+  margin-bottom:8px;cursor:pointer;font-size:14.5px;line-height:1.5;
+  transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--teal);}
+.opt input{margin-top:3px;accent-color:var(--teal);}
+.opt.chosen{border-color:var(--teal);background:#EAF4F2;}
+.opt.correct{border-color:var(--mint);background:#E3F3EF;}
+.opt.wrong{border-color:var(--red);background:#FBEAE8;}
+.opt .letter{
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;
+  color:var(--ink-soft);min-width:18px;
+}
+.opt.correct .letter{color:var(--mint);}
+.opt.wrong .letter{color:var(--red);}
+.result-banner{
+  position:sticky;bottom:18px;margin:30px 0 0;
+  background:var(--navy);color:#fff;border-radius:14px;
+  padding:20px 24px;box-shadow:var(--shadow-lg);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.result-banner .score{font-family:'Lora',serif;font-size:30px;font-weight:700;}
+.result-banner .pass{color:#9FE0D4;}
+.result-banner .fail{color:#F2B0A8;}
+.quiz-submit-bar{
+  position:sticky;bottom:18px;display:flex;justify-content:flex-end;margin-top:10px;
+}
+
+/* ===== contact / final ===== */
+.contact-card{
+  background:linear-gradient(135deg,var(--navy),var(--navy-deep));
+  color:#fff;border-radius:18px;padding:28px 26px;margin-top:10px;
+}
+.contact-card h3{margin:0 0 14px;font-size:18px;color:#fff;}
+.contact-row{display:flex;align-items:center;gap:10px;font-size:14.5px;margin-bottom:9px;color:#DCEAEE;}
+.contact-row b{color:#fff;}
+.contact-row a{color:var(--mint);text-decoration:none;}
+
+.pillnav{display:flex;justify-content:space-between;margin-top:48px;padding-top:24px;border-top:1px solid var(--line);gap:14px;}
+.pillnav .pbtn{
+  display:flex;flex-direction:column;gap:3px;
+  padding:12px 16px;border-radius:12px;border:1px solid var(--line);
+  background:var(--card);cursor:pointer;flex:1;max-width:48%;
+  transition:border-color .15s;
+}
+.pillnav .pbtn:hover{border-color:var(--teal);}
+.pillnav .pbtn.next{text-align:right;}
+.pillnav .plabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;}
+.pillnav .ptitle{font-size:13.5px;font-weight:600;color:var(--navy-deep);}
+
+/* checkbox lists for templates */
+.tpl-line{display:flex;gap:10px;align-items:center;font-size:14.5px;color:var(--ink-soft);padding:6px 0;}
+.tpl-line .box{width:15px;height:15px;border:1.5px solid var(--ink-soft);border-radius:3px;flex-shrink:0;}
+hr.soft{border:none;border-top:1px dashed var(--line);margin:26px 0;}
+
+/* ===== LOGIN SCREEN ===== */
+.login-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);
+  padding:24px;
+}
+.login-card{
+  background:var(--card);border-radius:18px;padding:38px 34px;
+  max-width:420px;width:100%;box-shadow:var(--shadow-lg);
+}
+.login-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:0 0 8px;}
+.login-card h1{font-size:24px;margin:0 0 6px;color:var(--navy-deep);}
+.login-sub{font-size:13.5px;color:var(--ink-soft);margin:0 0 26px;line-height:1.5;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+.field input,.field select{
+  width:100%;font-family:'Inter',sans-serif;font-size:14.5px;
+  padding:11px 14px;border:1.5px solid var(--line);border-radius:10px;
+  background:var(--paper);color:var(--ink);
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--teal);}
+.login-btn{width:100%;padding:13px;font-size:15px;margin-top:6px;}
+.login-note{font-size:12px;color:var(--ink-soft);margin-top:18px;text-align:center;line-height:1.5;}
+.field .req{color:var(--red);margin-left:2px;}
+.field input.invalid,.field select.invalid{border-color:var(--red);background:#FBEAE8;}
+.field .err-msg{display:none;color:var(--red);font-size:12px;margin-top:5px;line-height:1.4;}
+/* Hướng dẫn mở trên điện thoại */
+.mobile-guide{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper);}
+.mobile-guide summary{cursor:pointer;list-style:none;padding:12px 14px;font-size:13.5px;font-weight:600;color:var(--navy-deep);display:flex;align-items:center;gap:8px;}
+.mobile-guide summary::-webkit-details-marker{display:none;}
+.mobile-guide summary::after{content:"▾";margin-left:auto;color:var(--ink-soft);transition:transform .2s;}
+.mobile-guide[open] summary::after{transform:rotate(180deg);}
+.mobile-guide .mg-body{padding:4px 16px 16px;font-size:13px;line-height:1.6;color:var(--ink);}
+.mobile-guide .mg-body h4{font-size:13px;margin:12px 0 6px;color:var(--teal);}
+.mobile-guide .mg-body ol{margin:0 0 8px;padding-left:20px;}
+.mobile-guide .mg-body li{margin-bottom:4px;}
+.mobile-guide .mg-tip{background:var(--paper-warm);border-left:3px solid var(--mint);border-radius:0 8px 8px 0;padding:8px 12px;margin-top:8px;font-size:12.5px;color:var(--ink-soft);}
+
+
+/* ===== USER BADGE / SYNC ===== */
+.user-badge{
+  display:flex;align-items:center;gap:10px;padding:12px 22px;
+  border-bottom:1px solid rgba(255,255,255,0.12);
+}
+.user-avatar{
+  width:32px;height:32px;border-radius:50%;background:var(--mint);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Lora',serif;font-weight:700;font-size:13px;color:var(--navy-deep);
+  flex-shrink:0;
+}
+.user-meta{flex:1;min-width:0;}
+.user-name{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.user-dept{font-size:11px;color:#A9C2CC;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.logout-btn{background:none;border:none;color:#A9C2CC;cursor:pointer;font-size:11px;padding:4px;}
+.logout-btn:hover{color:#fff;}
+.sync-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);
+  padding:4px 10px;border-radius:20px;background:var(--paper-warm);
+}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);}
+.sync-dot.saving{background:var(--ink-soft);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* ===== ADMIN PAGE ===== */
+.dropzone{
+  border:2px dashed var(--line);border-radius:14px;
+  padding:28px 20px;text-align:center;margin-bottom:22px;
+  background:var(--paper-warm);transition:border-color .15s, background .15s;
+}
+.dropzone.drag{border-color:var(--teal);background:#EAF4F2;}
+.dropzone-inner{display:flex;flex-direction:column;align-items:center;}
+.admin-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
+.admin-toolbar input,.admin-toolbar select{
+  font-family:'Inter',sans-serif;font-size:13.5px;padding:9px 12px;
+  border:1.5px solid var(--line);border-radius:9px;background:var(--card);
+}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:26px;}
+.stat-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
+.stat-num{font-family:'Lora',serif;font-size:26px;font-weight:700;color:var(--navy-deep);}
+.stat-label{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+table.roster{width:100%;border-collapse:collapse;font-size:13.5px;}
+table.roster th{
+  background:var(--navy);color:#fff;text-align:left;padding:10px 12px;
+  font-size:11.5px;font-weight:600;letter-spacing:.02em;position:sticky;top:0;
+}
+table.roster td{padding:9px 12px;border-bottom:1px solid var(--line);}
+table.roster tr:nth-child(even) td{background:var(--paper-warm);}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge.pass{background:#DCEFE9;color:#0e5c4f;}
+.badge.fail{background:#FBEAE8;color:#a32d2d;}
+.badge.pending{background:var(--paper-warm);color:var(--ink-soft);}
+.empty-state{text-align:center;padding:50px 20px;color:var(--ink-soft);}
+.toast{
+  position:fixed;bottom:24px;right:24px;background:var(--navy-deep);color:#fff;
+  padding:12px 20px;border-radius:10px;font-size:13.5px;box-shadow:var(--shadow-lg);
+  z-index:100;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- WATCHDOG: phát hiện nếu JavaScript của app không chạy được hoặc bị môi trường chặn
+     (ví dụ QuickLook trên iOS khi mở file trực tiếp từ app Files, một số trình xem
+     trước tệp tin không hỗ trợ đầy đủ JavaScript tương tác). Nếu sau vài giây app
+     vẫn chưa khởi tạo xong (biến window.__appReady chưa được set), hiện cảnh báo rõ
+     ràng thay vì để màn hình "treo" không rõ lý do. -->
+<script>
+  window.__appReady = false;
+  setTimeout(function(){
+    if(!window.__appReady){
+      var box = document.createElement('div');
+      box.style.cssText = 'position:fixed;inset:0;background:#0B3954;color:#fff;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;font-family:sans-serif;text-align:center;';
+      box.innerHTML = '<div style="max-width:420px;"><div style="font-size:32px;margin-bottom:12px;">⚠</div>'
+        + '<div style="font-size:17px;font-weight:600;margin-bottom:10px;">Trình xem tệp này không chạy được ứng dụng</div>'
+        + '<div style="font-size:14px;line-height:1.6;color:#cfe3e9;">Trang chưa khởi động được sau vài giây — có thể bạn đang xem file bằng trình xem nhanh thay vì trình duyệt thật.<br><br>'
+        + '<b>Trên iPhone/iPad:</b> mở app Files → chạm giữ vào file → chọn <b>"Share" (Chia sẻ)</b> → chọn <b>Safari</b>. Hoặc mở Safari trước, vào mục Downloads để mở file.<br><br>'
+        + '<b>Trên Android:</b> mở app Quản lý tệp (Files/My Files) → chạm giữ vào file → chọn <b>"Mở bằng" (Open with)</b> → chọn <b>Chrome</b> (không chọn trình xem mặc định của máy). Nếu nhận file qua Zalo/Gmail, hãy tải file về máy trước (không mở trực tiếp), sau đó mở lại bằng Chrome từ thư mục Tải xuống (Downloads).</div></div>';
+      document.body.appendChild(box);
+    }
+  }, 3000);
+</script>
+<noscript>
+  <div style="position:fixed;inset:0;background:#0B3954;color:#fff;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;font-family:sans-serif;text-align:center;">
+    <div style="max-width:420px;">
+      <div style="font-size:32px;margin-bottom:12px;">⚠</div>
+      <div style="font-size:17px;font-weight:600;margin-bottom:10px;">Trình xem này đã tắt JavaScript</div>
+      <div style="font-size:14px;line-height:1.6;color:#cfe3e9;">
+        Ứng dụng Sổ tay Kỹ năng số cần JavaScript để hoạt động.<br><br>
+        <b>Trên iPhone/iPad:</b> mở app Files → chạm giữ vào file → chọn "Share" (Chia sẻ) → chọn <b>Safari</b>, thay vì xem trực tiếp bằng Quick Look.<br><br>
+        <b>Trên Android:</b> mở app Quản lý tệp → chạm giữ vào file → chọn "Mở bằng" → chọn <b>Chrome</b>. Nếu nhận qua Zalo/Gmail, hãy tải về máy trước khi mở.<br><br>
+        <b>Trên máy tính:</b> mở file bằng Chrome, Edge hoặc Firefox.
+      </div>
+    </div>
+  </div>
+</noscript>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div id="webviewWarning" style="display:none;background:#FBEAE8;border:1.5px solid var(--red);border-radius:10px;padding:12px 14px;margin-bottom:18px;font-size:13px;color:#7a1f15;line-height:1.55;">
+      ⚠ <b>App đang mở trong Zalo/Messenger/Email</b>, có thể không hoạt động đầy đủ (nút bấm không phản hồi, không lưu được tiến độ).<br>
+      Vui lòng nhấn vào nút <b>"⋮"</b> hoặc <b>"Mở bằng trình duyệt"</b> ở góc trên/dưới màn hình để mở file này bằng <b>Chrome, Safari hoặc Cốc Cốc</b>.
+    </div>
+    <p class="login-eyebrow">Hồ sơ học tập số</p>
+    <h1 class="serif">Sổ tay Kỹ năng số</h1>
+    <p class="login-sub">Bệnh viện Tim mạch An Giang — nhập thông tin để lưu tiến độ học tập của bạn và đồng bộ kết quả về sổ theo dõi của đơn vị.</p>
+    <div class="field">
+      <label for="inputName">Họ và tên <span class="req">*</span></label>
+      <input type="text" id="inputName" placeholder="Nguyễn Văn A" autocomplete="name">
+      <div class="err-msg" id="errName"></div>
+    </div>
+    <div class="field">
+      <label for="inputDept">Khoa / phòng <span class="req">*</span></label>
+      <input type="text" id="inputDept" placeholder="Khoa Nội tim mạch" autocomplete="organization">
+      <div class="err-msg" id="errDept"></div>
+    </div>
+    <div class="field">
+      <label for="inputRole">Chức danh <span class="req">*</span></label>
+      <select id="inputRole">
+        <option value="">— Chọn chức danh —</option>
+        <option>Bác sĩ</option>
+        <option>Điều dưỡng</option>
+        <option>Kỹ thuật viên</option>
+        <option>Dược sĩ</option>
+        <option>Hành chính</option>
+        <option>Khác</option>
+      </select>
+      <div class="err-msg" id="errRole"></div>
+    </div>
+    <button class="btn login-btn" id="loginBtn">Vào sổ tay</button>
+
+    <details class="mobile-guide">
+      <summary>📱 Hướng dẫn mở app trên điện thoại (iPhone &amp; Android)</summary>
+      <div class="mg-body">
+        <h4>🍎 Trên iPhone / iPad</h4>
+        <ol>
+          <li>Mở app <b>Tệp (Files)</b> → tìm tới file <i>So_tay_Ky_nang_so…html</i> (thường ở mục <b>Tải xuống / Downloads</b> hoặc <b>Trên iPhone của tôi</b>).</li>
+          <li>Chạm giữ vào file → chọn <b>Chia sẻ (Share)</b>.</li>
+          <li>Trong bảng chia sẻ, chọn <b>Safari</b> (hoặc Chrome). App sẽ mở đầy đủ trong trình duyệt.</li>
+        </ol>
+        <h4>🤖 Trên Android</h4>
+        <ol>
+          <li>Mở app <b>Quản lý tệp (File Manager / Files / My Files)</b> → vào thư mục <b>Download / Tải xuống</b>.</li>
+          <li>Chạm giữ (hoặc nhấn) vào file <i>So_tay_Ky_nang_so…html</i> → chọn <b>Mở bằng (Open with)</b>.</li>
+          <li>Chọn <b>Chrome</b> hoặc <b>Cốc Cốc</b> (đừng chọn trình xem mặc định của máy).</li>
+        </ol>
+        <div class="mg-tip">💡 <b>Mẹo:</b> Nếu nhận file qua <b>Zalo / Messenger / Gmail</b>, hãy <b>tải file về máy trước</b> rồi mở lại bằng Chrome/Safari — không mở trực tiếp trong các app đó (app có thể không bấm được nút hoặc không lưu được tiến độ). Trên iPhone, tránh chế độ <b>"Xem nhanh (Quick Look)"</b>.</div>
+      </div>
+    </details>
+    <p class="login-note">Tiến độ học tập của bạn được lưu ngay trên máy/trình duyệt này. Sau khi hoàn thành bài kiểm tra, hãy tải file kết quả và gửi cho Phòng Công nghệ thông tin để được xác nhận hoàn thành chính thức.</p>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="app" id="appRoot" style="display:none;">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <p class="brand-eyebrow">Hồ sơ học tập số</p>
+      <h1>Sổ tay Kỹ năng số</h1>
+      <p class="brand-sub">Bệnh viện Tim mạch An Giang<br>Theo Quyết định 757/QĐ-BKHCN</p>
+    </div>
+    <div class="user-badge" id="userBadge">
+      <div class="user-avatar" id="userAvatar">··</div>
+      <div class="user-meta">
+        <div class="user-name" id="userNameDisplay">—</div>
+        <div class="user-dept" id="userDeptDisplay">—</div>
+      </div>
+      <button class="logout-btn" id="logoutBtn" title="Đổi người dùng">Đổi</button>
+    </div>
+    <nav class="nav-scroll" id="navScroll"></nav>
+    <div class="nav-progress">
+      <div class="progress-label"><span>Tiến độ đọc</span><span id="progressPct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div style="margin-top:10px;"><span class="sync-pill"><span class="sync-dot" id="syncDot"></span><span id="syncLabel">Đã lưu</span></span></div>
+      <div class="app-credit">© Bệnh viện Tim mạch An Giang<br>Thiết kế &amp; phát triển: <b>KS. Tống Hoàng Khang Nghi</b></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-btn" id="menuBtn" aria-label="Mở mục lục">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <span class="topbar-title">Sổ tay Kỹ năng số</span>
+    </div>
+    <div class="ecg-wrap">
+      <svg class="ecg-svg ecg-animated" viewBox="0 0 1000 34" preserveAspectRatio="none">
+        <path class="ecg-path" d="M0,17 L60,17 L75,17 L85,4 L95,30 L105,8 L115,17 L260,17 L275,17 L285,4 L295,30 L305,8 L315,17 L460,17 L475,17 L485,4 L495,30 L505,8 L515,17 L660,17 L675,17 L685,4 L695,30 L705,8 L715,17 L860,17 L875,17 L885,4 L895,30 L905,8 L915,17 L1000,17
+        M1000,17 L1060,17 L1075,17 L1085,4 L1095,30 L1105,8 L1115,17 L1260,17 L1275,17 L1285,4 L1295,30 L1305,8 L1315,17 L1460,17 L1475,17 L1485,4 L1495,30 L1505,8 L1515,17 L1660,17 L1675,17 L1685,4 L1695,30 L1705,8 L1715,17 L1860,17 L1875,17 L1885,4 L1895,30 L1905,8 L1915,17 L2000,17"/>
+      </svg>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DỮ LIỆU SỔ TAY =====
+
+const HOSPITAL = "Bệnh viện Tim mạch An Giang";
+
+const COMPETENCY_GROUPS = [
+  {
+    id: 1,
+    title: "Nhận thức số",
+    intro: "Là khả năng hiểu đúng về chuyển đổi số và vai trò của công nghệ số trong hoạt động khám, chữa bệnh.",
+    items: [
+      "Hiểu khái niệm chuyển đổi số và sự khác biệt với tin học hóa, ứng dụng công nghệ thông tin đơn lẻ.",
+      "Hiểu vai trò của công nghệ số trong quản trị bệnh viện, khám chữa bệnh và phục vụ người bệnh.",
+      "Biết các ứng dụng AI cơ bản có thể hỗ trợ công việc chuyên môn và hành chính (tra cứu, tóm tắt, hỗ trợ soạn thảo).",
+    ],
+  },
+  {
+    id: 2,
+    title: "Khai thác dữ liệu và thông tin",
+    intro: "Là khả năng tìm kiếm, đánh giá và sử dụng hiệu quả dữ liệu, thông tin trên môi trường số.",
+    items: [
+      "Tìm kiếm thông tin trên môi trường số bằng công cụ tìm kiếm, cơ sở dữ liệu chuyên ngành y tế.",
+      "Đánh giá độ tin cậy của thông tin trước khi sử dụng hoặc chia sẻ.",
+      "Quản lý dữ liệu công việc cá nhân một cách khoa học, có sao lưu.",
+      "Sử dụng thành thạo các hệ thống thông tin bệnh viện: HIS, LIS, PACS, EMR.",
+    ],
+  },
+  {
+    id: 3,
+    title: "Giao tiếp và hợp tác số",
+    intro: "Là khả năng sử dụng các công cụ số để giao tiếp, trao đổi công việc đúng quy định.",
+    items: [
+      "Sử dụng email công vụ đúng mục đích, đúng quy định bảo mật.",
+      "Sử dụng văn bản điện tử, phần mềm quản lý văn bản, điều hành.",
+      "Chia sẻ dữ liệu đúng quy định, đúng đối tượng, đúng phạm vi được phép.",
+      "Sử dụng chữ ký số trong xử lý văn bản, hồ sơ điện tử.",
+    ],
+  },
+  {
+    id: 4,
+    title: "Sáng tạo nội dung số",
+    intro: "Là khả năng tạo lập, biên soạn các sản phẩm số phục vụ công việc.",
+    items: [
+      "Soạn thảo văn bản điện tử đúng thể thức, đúng quy định hành chính.",
+      "Lập báo cáo bằng các công cụ số (bảng tính, phần mềm thống kê, trình chiếu).",
+      "Sử dụng công cụ AI hỗ trợ công việc một cách có kiểm soát, có kiểm tra lại kết quả.",
+    ],
+  },
+  {
+    id: 5,
+    title: "An toàn thông tin",
+    intro: "Là khả năng nhận diện rủi ro và bảo vệ thông tin, dữ liệu trong quá trình làm việc.",
+    items: [
+      "Bảo vệ mật khẩu cá nhân, không chia sẻ, không sử dụng mật khẩu dễ đoán.",
+      "Bảo vệ dữ liệu, thông tin người bệnh theo đúng quy định pháp luật về bảo vệ dữ liệu cá nhân.",
+      "Nhận diện các nguy cơ lừa đảo trực tuyến (email giả mạo, liên kết độc hại, yêu cầu cung cấp thông tin bất thường).",
+    ],
+  },
+  {
+    id: 6,
+    title: "Giải quyết vấn đề bằng công nghệ số",
+    intro: "Là khả năng xử lý các vấn đề phát sinh trong quá trình sử dụng công nghệ.",
+    items: [
+      "Xử lý được các lỗi công nghệ cơ bản thường gặp trong công việc hằng ngày.",
+      "Phối hợp với Phòng Công nghệ thông tin khi gặp sự cố vượt quá khả năng tự xử lý.",
+      "Đề xuất các cải tiến quy trình làm việc bằng ứng dụng công nghệ số.",
+    ],
+  },
+];
+
+// 30 câu hỏi - mảng opts, ans là index 0-3 (A=0,B=1,C=2,D=3)
+const QUESTIONS = [
+  { group: 1, q: "Chuyển đổi số trong bệnh viện được hiểu là:", opts: ["Mua thêm máy tính, trang thiết bị hiện đại", "Ứng dụng công nghệ số để thay đổi phương thức tổ chức, vận hành và phục vụ người bệnh", "Chỉ sử dụng phần mềm HIS trong quản lý", "Lưu hồ sơ bệnh án dưới dạng tệp PDF"], ans: 1 },
+  { group: 1, q: "Trí tuệ nhân tạo (AI) trong bệnh viện có vai trò chủ yếu là:", opts: ["Thay thế hoàn toàn vai trò của bác sĩ", "Hỗ trợ phân tích, tìm kiếm, tổng hợp và tạo nội dung phục vụ công việc", "Tự ra quyết định điều trị cho người bệnh", "Không cần con người kiểm tra lại kết quả"], ans: 1 },
+  { group: 1, q: "Mục tiêu chính của chuyển đổi số trong ngành y tế là:", opts: ["Giảm số lượng nhân viên y tế", "Nâng cao chất lượng quản lý, khám chữa bệnh và phục vụ người bệnh", "Tăng chi phí vận hành bệnh viện", "Thay thế hồ sơ giấy bằng hồ sơ giấy có đóng dấu số"], ans: 1 },
+  { group: 1, q: "Văn hóa làm việc trên môi trường số đòi hỏi cán bộ, viên chức phải:", opts: ["Chỉ sử dụng công nghệ khi được yêu cầu", "Chủ động học hỏi, thích ứng và ứng dụng công nghệ vào công việc hằng ngày", "Giao toàn bộ công việc số cho Phòng Công nghệ thông tin", "Hạn chế tối đa việc sử dụng thiết bị số"], ans: 1 },
+  { group: 1, q: "Khung kỹ năng số cơ bản dành cho cán bộ, công chức, viên chức khu vực công được ban hành theo văn bản nào?", opts: ["Quyết định số 757/QĐ-BKHCN ngày 29/4/2025 của Bộ Khoa học và Công nghệ", "Luật Công nghệ thông tin năm 2006", "Luật An toàn thông tin mạng năm 2015", "Nghị định 30/2020/NĐ-CP"], ans: 0 },
+
+  { group: 2, q: "Hệ thống HIS trong bệnh viện được sử dụng để:", opts: ["Quản lý hình ảnh chẩn đoán y khoa", "Quản lý thông tin, hoạt động khám chữa bệnh và vận hành bệnh viện", "Quản lý kết quả xét nghiệm", "Quản lý hồ sơ nhân sự"], ans: 1 },
+  { group: 2, q: "PACS là hệ thống dùng để:", opts: ["Lưu trữ và truyền tải hình ảnh y khoa (X-quang, CT, MRI...)", "Quản lý đơn thuốc điện tử", "Quản lý lịch làm việc của nhân viên", "Quản lý hóa đơn viện phí"], ans: 0 },
+  { group: 2, q: "Khi tìm kiếm thông tin y khoa trên môi trường số, cán bộ, viên chức cần:", opts: ["Sử dụng ngay thông tin đầu tiên tìm được", "Đánh giá độ tin cậy, nguồn gốc thông tin trước khi sử dụng", "Chia sẻ ngay thông tin cho đồng nghiệp mà không kiểm chứng", "Bỏ qua việc kiểm tra vì tốn thời gian"], ans: 1 },
+  { group: 2, q: "Việc quản lý dữ liệu công việc cá nhân một cách khoa học bao gồm:", opts: ["Lưu trữ phân loại rõ ràng và có sao lưu định kỳ", "Lưu toàn bộ dữ liệu trên một thiết bị duy nhất, không sao lưu", "Xóa dữ liệu cũ ngay sau khi sử dụng", "Chia sẻ dữ liệu công việc lên mạng xã hội cá nhân"], ans: 0 },
+  { group: 2, q: "LIS là hệ thống thông tin chuyên dùng cho:", opts: ["Quản lý xét nghiệm tại khoa Xét nghiệm (Laboratory)", "Quản lý hình ảnh chẩn đoán", "Quản lý hồ sơ bệnh án điện tử tổng quát", "Quản lý văn bản hành chính"], ans: 0 },
+
+  { group: 3, q: "Email công vụ cần được sử dụng:", opts: ["Cho cả mục đích công việc và cá nhân không phân biệt", "Đúng mục đích công việc, tuân thủ quy định bảo mật của đơn vị", "Chia sẻ tài khoản cho nhiều người cùng dùng", "Đăng ký các dịch vụ thương mại điện tử cá nhân"], ans: 1 },
+  { group: 3, q: "Chữ ký số được sử dụng trong bệnh viện nhằm mục đích:", opts: ["Thay thế con dấu mộc trong mọi trường hợp", "Xác thực và đảm bảo tính pháp lý cho văn bản, hồ sơ điện tử", "Trang trí cho văn bản điện tử", "Chỉ dùng cho văn bản nội bộ không quan trọng"], ans: 1 },
+  { group: 3, q: "Khi chia sẻ dữ liệu công việc cho đơn vị khác, cán bộ, viên chức cần:", opts: ["Chia sẻ ngay khi được yêu cầu, không cần kiểm tra", "Chia sẻ đúng đối tượng, đúng phạm vi được phép theo quy định", "Chia sẻ qua mạng xã hội cá nhân để tiện trao đổi", "Từ chối chia sẻ trong mọi trường hợp"], ans: 1 },
+  { group: 3, q: "Văn bản điện tử trong bệnh viện cần được xử lý:", opts: ["Theo quy trình quản lý văn bản, điều hành đã được phê duyệt", "Theo cách riêng của từng cá nhân", "Không cần lưu trữ sau khi xử lý xong", "Chỉ áp dụng cho văn bản đến, không áp dụng văn bản đi"], ans: 0 },
+  { group: 3, q: "Một trong những lợi ích của việc sử dụng phần mềm quản lý văn bản, điều hành là:", opts: ["Giúp theo dõi tiến độ xử lý văn bản minh bạch, kịp thời", "Làm tăng thời gian xử lý văn bản", "Yêu cầu in ấn nhiều bản giấy hơn trước", "Không liên quan đến công tác chuyển đổi số"], ans: 0 },
+
+  { group: 4, q: "Văn bản điện tử do cán bộ, viên chức soạn thảo cần đảm bảo:", opts: ["Đúng thể thức, đúng quy định hành chính hiện hành", "Tự do về hình thức trình bày", "Không cần tuân theo mẫu nào", "Chỉ cần đúng nội dung, không cần đúng thể thức"], ans: 0 },
+  { group: 4, q: "Khi sử dụng công cụ AI để hỗ trợ soạn thảo báo cáo, cán bộ, viên chức cần:", opts: ["Sử dụng nguyên kết quả AI tạo ra, không cần kiểm tra lại", "Kiểm tra, đối chiếu và chịu trách nhiệm về tính chính xác của nội dung trước khi sử dụng", "Không công bố việc đã sử dụng AI trong mọi trường hợp", "Chỉ dùng AI cho văn bản không quan trọng"], ans: 1 },
+  { group: 4, q: "Lập báo cáo bằng công cụ số mang lại lợi ích:", opts: ["Tăng tính chính xác, dễ tổng hợp, dễ chia sẻ dữ liệu", "Làm chậm tiến độ báo cáo", "Khó kiểm soát số liệu hơn cách làm thủ công", "Không có khác biệt so với làm báo cáo bằng tay"], ans: 0 },
+  { group: 4, q: "Một trong các nguyên tắc khi soạn thảo nội dung số phục vụ công việc là:", opts: ["Đảm bảo tính chính xác, khách quan và phù hợp với quy định của ngành y tế", "Ưu tiên hình thức bắt mắt hơn nội dung chính xác", "Sao chép nguyên văn nội dung từ nguồn khác mà không kiểm tra", "Không cần tuân thủ quy định bảo mật thông tin người bệnh"], ans: 0 },
+  { group: 4, q: "Việc ứng dụng công cụ số trong lập kế hoạch, báo cáo công tác chuyên môn giúp:", opts: ["Nâng cao hiệu quả quản lý và ra quyết định", "Làm tăng khối lượng công việc hành chính", "Giảm độ chính xác của số liệu", "Không có tác dụng đối với công tác quản trị bệnh viện"], ans: 0 },
+
+  { group: 5, q: "Thông tin, dữ liệu của người bệnh được xác định là:", opts: ["Thông tin công khai, có thể chia sẻ tự do", "Dữ liệu cá nhân cần được bảo vệ theo quy định pháp luật", "Dữ liệu không quan trọng, không cần bảo mật", "Chỉ cần bảo mật khi người bệnh yêu cầu"], ans: 1 },
+  { group: 5, q: "Khi nhận được email nghi ngờ yêu cầu cung cấp mật khẩu hoặc thông tin cá nhân, cán bộ, viên chức cần:", opts: ["Gửi ngay mật khẩu để tránh bị khóa tài khoản", "Mở file đính kèm để kiểm tra nội dung", "Báo ngay cho Phòng Công nghệ thông tin và không cung cấp thông tin", "Chuyển tiếp email cho đồng nghiệp để cùng xử lý"], ans: 2 },
+  { group: 5, q: "Mật khẩu tài khoản công vụ cần được:", opts: ["Đặt đơn giản, dễ nhớ và chia sẻ cho đồng nghiệp khi cần", "Bảo mật, đủ mạnh, không chia sẻ và thay đổi định kỳ", "Ghi ra giấy và dán tại nơi làm việc để dễ tra cứu", "Sử dụng giống nhau cho tất cả các tài khoản cá nhân và công vụ"], ans: 1 },
+  { group: 5, q: "Hành vi nào sau đây là dấu hiệu của lừa đảo trực tuyến (phishing)?", opts: ["Email từ địa chỉ lạ, yêu cầu truy cập liên kết hoặc cung cấp thông tin khẩn cấp, bất thường", "Email nội bộ thông báo lịch họp định kỳ", "Thông báo từ phần mềm HIS về việc cập nhật phiên bản đã được xác nhận", "Email từ địa chỉ nội bộ đã được xác thực, có nội dung công việc rõ ràng"], ans: 0 },
+  { group: 5, q: "Trách nhiệm bảo vệ dữ liệu người bệnh thuộc về:", opts: ["Chỉ Phòng Công nghệ thông tin", "Chỉ Ban Giám đốc", "Toàn thể cán bộ, viên chức, người lao động có liên quan đến xử lý dữ liệu", "Không ai chịu trách nhiệm cụ thể"], ans: 2 },
+
+  { group: 6, q: "Khi gặp lỗi kỹ thuật cơ bản trong quá trình sử dụng phần mềm, cán bộ, viên chức nên:", opts: ["Tự ý gỡ bỏ phần mềm để cài lại mà không báo cáo", "Thử các bước xử lý cơ bản đã được hướng dẫn; nếu không khắc phục được thì báo Phòng Công nghệ thông tin", "Ngừng sử dụng hoàn toàn hệ thống mà không thông báo", "Yêu cầu đồng nghiệp xử lý thay mà không ghi nhận sự cố"], ans: 1 },
+  { group: 6, q: "Việc phối hợp với Phòng Công nghệ thông tin khi xảy ra sự cố hệ thống cần được thực hiện:", opts: ["Kịp thời, cung cấp thông tin chính xác về sự cố", "Trì hoãn báo cáo để tự xử lý trước", "Không cần thiết nếu sự cố nhỏ", "Chỉ báo cáo khi sự cố ảnh hưởng đến toàn bệnh viện"], ans: 0 },
+  { group: 6, q: "Đề xuất cải tiến quy trình làm việc bằng công nghệ số cần dựa trên:", opts: ["Thực tiễn công việc, nhu cầu của đơn vị và khả năng ứng dụng công nghệ phù hợp", "Sở thích cá nhân về công nghệ", "Chỉ làm theo yêu cầu từ cấp trên, không cần xuất phát từ thực tế", "Không cần khảo sát hay đánh giá trước khi đề xuất"], ans: 0 },
+  { group: 6, q: "Khi hệ thống thông tin bệnh viện (HIS/LIS/PACS) gặp sự cố ảnh hưởng đến công tác khám chữa bệnh, ưu tiên hàng đầu là:", opts: ["Đảm bảo an toàn cho người bệnh và thông báo ngay cho bộ phận có trách nhiệm xử lý", "Tiếp tục chờ đợi hệ thống tự khắc phục", "Ghi chép lại sự cố nhưng không cần báo cáo ngay", "Tạm ngừng toàn bộ hoạt động của khoa, phòng"], ans: 0 },
+  { group: 6, q: "Năng lực giải quyết vấn đề bằng công nghệ số được rèn luyện chủ yếu qua:", opts: ["Thực hành thường xuyên, chủ động học hỏi và phối hợp xử lý các tình huống thực tế", "Chỉ học lý thuyết mà không thực hành", "Chờ được đào tạo lại từ đầu mỗi khi có sự cố", "Giao toàn bộ việc xử lý cho Phòng Công nghệ thông tin"], ans: 0 },
+];
+
+const CONTACT = {
+  name: "Bà Phùng Thị Ánh Huệ",
+  org: "Sở Khoa học và Công nghệ tỉnh An Giang — Phòng Chuyển đổi số",
+  phone: "0945080876",
+  email: "ptahue.skhcn@angiang.gov.vn",
+};
+
+</script>
+<script>
+// ===================== APP STATE =====================
+const state = {
+  user: null,          // {name, dept, role}
+  selfAssess: {},     // {"1-0": 2, ...} groupId-itemIndex -> level(0,1,2)
+  quizAnswers: {},    // questionIndex -> selected option index
+  quizSubmitted: false,
+  visited: new Set(),
+};
+
+function slugify(s){
+  return (s||'').trim().toLowerCase()
+    .replace(/đ/g,'d')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+}
+function employeeId(){
+  if(!state.user) return null;
+  return slugify(state.user.name) + '__' + slugify(state.user.dept);
+}
+
+const LS_PREFIX = 'sotaykynangso:';
+
+function storageAvailable(){
+  try{
+    const k = LS_PREFIX + '__test__';
+    window.localStorage.setItem(k, '1');
+    window.localStorage.removeItem(k);
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+// ===================== LOCAL STORAGE (lưu trên máy người dùng) =====================
+function setSync(saving){
+  const dot = document.getElementById('syncDot');
+  const lbl = document.getElementById('syncLabel');
+  if(!dot) return;
+  if(!storageAvailable()){
+    dot.style.background = 'var(--red)';
+    lbl.textContent = 'Không lưu được trên máy này';
+    return;
+  }
+  if(saving){ dot.classList.add('saving'); lbl.textContent = 'Đang lưu...'; }
+  else { dot.classList.remove('saving'); lbl.textContent = 'Đã lưu trên máy này'; }
+}
+
+let saveTimer = null;
+function scheduleSave(){
+  if(!storageAvailable()) return;
+  clearTimeout(saveTimer);
+  setSync(true);
+  saveTimer = setTimeout(savePersonalProgress, 500);
+}
+
+function savePersonalProgress(){
+  if(!storageAvailable() || !state.user) return;
+  const id = employeeId();
+  const payload = {
+    user: state.user,
+    selfAssess: state.selfAssess,
+    quizAnswers: state.quizAnswers,
+    quizSubmitted: state.quizSubmitted,
+    visited: Array.from(state.visited),
+    updatedAt: new Date().toISOString(),
+  };
+  try{
+    window.localStorage.setItem(LS_PREFIX + 'progress:' + id, JSON.stringify(payload));
+    setSync(false);
+  }catch(e){
+    console.error('Lỗi lưu tiến độ cá nhân', e);
+    setSync(false);
+  }
+}
+
+function loadPersonalProgress(name, dept){
+  if(!storageAvailable()) return null;
+  const id = slugify(name) + '__' + slugify(dept);
+  try{
+    const raw = window.localStorage.getItem(LS_PREFIX + 'progress:' + id);
+    if(raw) return JSON.parse(raw);
+  }catch(e){ /* chưa có dữ liệu trước đó */ }
+  return null;
+}
+
+function saveLastUser(user){
+  if(!storageAvailable()) return;
+  try{ window.localStorage.setItem(LS_PREFIX + 'last_user', JSON.stringify(user)); }catch(e){}
+}
+function loadLastUser(){
+  if(!storageAvailable()) return null;
+  try{
+    const raw = window.localStorage.getItem(LS_PREFIX + 'last_user');
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return null;
+}
+
+// ===================== XUẤT FILE KẾT QUẢ (gửi cho Phòng CNTT) =====================
+function downloadResultFile(){
+  const graded = gradeQuiz();
+  const result = {
+    type: 'sotay_ky_nang_so_result',
+    version: 1,
+    name: state.user.name,
+    dept: state.user.dept,
+    role: state.user.role,
+    correct: graded.correct,
+    total: graded.total,
+    pct: graded.pct,
+    pass: graded.pass,
+    answers: state.quizAnswers,
+    submittedAt: new Date().toISOString(),
+  };
+  try{
+    const json = JSON.stringify(result, null, 2);
+    const blob = new Blob([json], {type:'application/json;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const filename = 'ketqua_' + employeeId() + '.json';
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    return filename;
+  }catch(e){
+    console.error('Lỗi xuất file kết quả', e);
+    showToast('Không thể tạo file kết quả trong môi trường này.');
+    return null;
+  }
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+// ===================== PAGE DEFINITIONS =====================
+const PAGES = [
+  { id:"intro", group:"Mở đầu", label:"Giới thiệu sổ tay" },
+  { id:"plan", group:"Mở đầu", label:"Kế hoạch triển khai" },
+  ...COMPETENCY_GROUPS.map(g=>({ id:"grp-"+g.id, group:"Kiến thức & kỹ năng số", label:g.id+". "+g.title })),
+  { id:"selfassess", group:"Tự đánh giá", label:"Phiếu tự đánh giá năng lực" },
+  { id:"quiz", group:"Kiểm tra", label:"Bài kiểm tra 30 câu" },
+  { id:"certificate", group:"Hoàn thành", label:"Giấy xác nhận hoàn thành" },
+  { id:"contact", group:"Hỗ trợ", label:"Liên hệ & kết luận" },
+  { id:"admin", group:"Quản trị", label:"Sổ theo dõi toàn viện" },
+];
+
+function pageIndex(id){ return PAGES.findIndex(p=>p.id===id); }
+
+// ===================== RENDER SIDEBAR =====================
+function renderNav(activeId){
+  const nav = document.getElementById('navScroll');
+  nav.innerHTML = '';
+  let lastGroup = null;
+  PAGES.forEach((p,i)=>{
+    if(p.group !== lastGroup){
+      const lab = document.createElement('div');
+      lab.className = 'nav-group-label';
+      lab.textContent = p.group;
+      nav.appendChild(lab);
+      lastGroup = p.group;
+    }
+    const btn = document.createElement('button');
+    btn.className = 'nav-item' + (p.id===activeId ? ' active':'');
+    btn.innerHTML = `<span class="nav-num">${String(i+1).padStart(2,'0')}</span><span>${p.label}</span>`;
+    btn.onclick = ()=>{ goTo(p.id); closeSidebar(); };
+    nav.appendChild(btn);
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const readable = PAGES.filter(p=>p.id!=='admin');
+  const visitedReadable = readable.filter(p=>state.visited.has(p.id)).length;
+  const pct = Math.round((visitedReadable / readable.length) * 100);
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ===================== ROUTER =====================
+const ADMIN_PIN = '757757';
+let adminUnlocked = false;
+
+function goTo(id){
+  if(id === 'admin' && !adminUnlocked){
+    const pin = prompt('Trang Quản trị dành cho Phòng Công nghệ thông tin.\nVui lòng nhập mã truy cập:');
+    if(pin !== ADMIN_PIN){
+      if(pin !== null) showToast('Mã truy cập không đúng');
+      return;
+    }
+    adminUnlocked = true;
+  }
+  state.visited.add(id);
+  const idx = pageIndex(id);
+  renderNav(id);
+  renderPage(id, idx);
+  window.scrollTo({top:0, behavior:'instant'});
+  document.querySelector('.main').scrollTo?.({top:0});
+  if(state.user) scheduleSave();
+}
+
+// ===================== SIDEBAR MOBILE TOGGLE =====================
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+document.getElementById('menuBtn').onclick = ()=>{
+  sidebar.classList.add('open'); overlay.classList.add('show');
+};
+function closeSidebar(){ sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+overlay.onclick = closeSidebar;
+
+// ===================== PILL NAV (prev/next) =====================
+function pillNav(currentId){
+  const readable = PAGES.filter(p=>p.id!=='admin');
+  const idx = readable.findIndex(p=>p.id===currentId);
+  const prev = readable[idx-1];
+  const next = readable[idx+1];
+  let html = '<div class="pillnav">';
+  if(prev){
+    html += `<button class="pbtn prev" onclick="goTo('${prev.id}')"><span class="plabel">← Trước</span><span class="ptitle">${prev.label}</span></button>`;
+  } else { html += '<div></div>'; }
+  if(next){
+    html += `<button class="pbtn next" onclick="goTo('${next.id}')"><span class="plabel">Tiếp →</span><span class="ptitle">${next.label}</span></button>`;
+  } else { html += '<div></div>'; }
+  html += '</div>';
+  return html;
+}
+
+// ===================== PAGE RENDERERS =====================
+function renderPage(id){
+  const c = document.getElementById('content');
+  let html = '';
+  switch(true){
+    case id==='intro': html = pageIntro(); break;
+    case id==='plan': html = pagePlan(); break;
+    case id.startsWith('grp-'): html = pageGroup(parseInt(id.split('-')[1])); break;
+    case id==='selfassess': html = pageSelfAssess(); break;
+    case id==='quiz': html = pageQuiz(); break;
+    case id==='certificate': html = pageCertificate(); break;
+    case id==='contact': html = pageContact(); break;
+    case id==='admin': html = pageAdminLoading(); break;
+  }
+  c.innerHTML = html + (id==='admin' ? '' : pillNav(id));
+  if(id==='selfassess') bindSelfAssess();
+  if(id==='quiz') bindQuiz();
+  if(id==='admin') loadAdminPage();
+}
+
+function pageIntro(){
+  return `
+    <p class="page-eyebrow"><span class="dot"></span>Giới thiệu</p>
+    <h2 class="page-title">Sổ tay Kiến thức, Kỹ năng số cơ bản</h2>
+    <p class="lead">Dành cho cán bộ, viên chức, người lao động ${HOSPITAL} — căn cứ Khung kỹ năng số cơ bản ban hành kèm theo Quyết định số 757/QĐ-BKHCN ngày 29/4/2025 của Bộ Khoa học và Công nghệ, và Chỉ thị số 14/CT-TTg ngày 22/4/2026 của Thủ tướng Chính phủ.</p>
+
+    <p class="body-text">Chuyển đổi số trong bệnh viện không chỉ là việc trang bị máy tính hay phần mềm — mà là năng lực của từng cán bộ, viên chức trong việc hiểu, sử dụng và bảo vệ thông tin trên môi trường số. Sổ tay này giúp bạn:</p>
+    <ul class="bullets">
+      <li>Nắm vững 6 nhóm năng lực số cơ bản cần có trong công việc hằng ngày.</li>
+      <li>Tự đánh giá mức độ thành thạo của bản thân theo từng nhóm năng lực.</li>
+      <li>Làm bài kiểm tra 30 câu để được xác nhận hoàn thành chính thức.</li>
+    </ul>
+
+    <div class="info-box">
+      <strong>Mẹo sử dụng app:</strong> Dùng mục lục bên trái (hoặc nút ☰ trên điện thoại) để di chuyển giữa các phần. Tiến độ đọc của bạn được hiển thị ở cuối thanh điều hướng.
+    </div>
+
+    <div class="section-h"><span class="num">§</span>Đối tượng áp dụng</div>
+    <ul class="bullets">
+      <li>Viên chức y tế (bác sĩ, điều dưỡng, kỹ thuật viên, dược sĩ...).</li>
+      <li>Người lao động thuộc các khoa, phòng trong bệnh viện.</li>
+    </ul>
+
+    <hr class="soft">
+    <p style="font-size:12.5px;color:var(--ink-soft);text-align:center;">Ứng dụng được thiết kế và phát triển bởi <b style="color:var(--navy);">KS. Tống Hoàng Khang Nghi</b></p>
+    <p style="font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:4px;">© Bản quyền thuộc ${HOSPITAL}. Nghiêm cấm sao chép, chỉnh sửa nội dung hoặc phát hành lại khi chưa được phép.</p>
+  `;
+}
+
+function pagePlan(){
+  return `
+    <p class="page-eyebrow"><span class="dot"></span>Phần I</p>
+    <h2 class="page-title">Kế hoạch triển khai nâng cao năng lực số</h2>
+    <p class="lead">Triển khai phổ cập kiến thức, kỹ năng số cơ bản cho cán bộ, viên chức, người lao động ${HOSPITAL}.</p>
+
+    <div class="section-h"><span class="num">I.</span>Mục đích</div>
+    <ul class="bullets">
+      <li>Nâng cao nhận thức của cán bộ, viên chức về vai trò của chuyển đổi số trong ngành y tế.</li>
+      <li>Trang bị kỹ năng số cơ bản để sử dụng hiệu quả các hệ thống: HIS, LIS, PACS, EMR, văn bản điện tử và các nền tảng số phục vụ công việc.</li>
+      <li>Hình thành văn hóa làm việc trên môi trường số.</li>
+    </ul>
+
+    <div class="section-h"><span class="num">II.</span>Các giai đoạn thực hiện</div>
+    <table class="doc-table">
+      <tr><th>Giai đoạn</th><th>Nội dung</th></tr>
+      <tr><td><b>1. Chuẩn bị</b></td><td>Ban hành Sổ tay, xây dựng kế hoạch, gửi tài liệu đến các khoa, phòng.</td></tr>
+      <tr><td><b>2. Tự học & nghiên cứu</b></td><td>Đọc Sổ tay, tự đánh giá năng lực số, tham gia hướng dẫn khi cần.</td></tr>
+      <tr><td><b>3. Đánh giá</b></td><td>Kiểm tra kiến thức số, tổng hợp kết quả, xác định nhu cầu đào tạo bổ sung.</td></tr>
+    </table>
+
+    <div class="section-h"><span class="num">III.</span>Phân công thực hiện</div>
+    <table class="doc-table">
+      <tr><th>Đơn vị</th><th>Nội dung phân công</th></tr>
+      <tr><td>Ban Giám đốc</td><td>Chỉ đạo chung</td></tr>
+      <tr><td>Phòng Công nghệ thông tin</td><td>Chủ trì triển khai, tổ chức kiểm tra, cấp giấy xác nhận</td></tr>
+      <tr><td>Phòng Tổ chức cán bộ</td><td>Quản lý danh sách, lưu hồ sơ kết quả</td></tr>
+      <tr><td>Các khoa, phòng</td><td>Tổ chức thực hiện tại đơn vị</td></tr>
+    </table>
+  `;
+}
+
+function pageGroup(id){
+  const g = COMPETENCY_GROUPS.find(x=>x.id===id);
+  const others = COMPETENCY_GROUPS.filter(x=>x.id!==id);
+  return `
+    <p class="page-eyebrow"><span class="dot"></span>Phần II · Nhóm năng lực ${g.id}/6</p>
+    <h2 class="page-title">${g.title}</h2>
+    <p class="lead">${g.intro}</p>
+
+    <div class="group-card">
+      <div class="group-head">
+        <div class="group-num">${g.id}</div>
+        <div class="group-title">Nội dung cần nắm</div>
+      </div>
+      <ul class="bullets">
+        ${g.items.map(it=>`<li>${it}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="info-box">
+      Sau khi đọc đủ 6 nhóm năng lực, hãy chuyển sang <strong>Phiếu tự đánh giá</strong> để tự chấm điểm mức độ thành thạo của bạn, rồi làm <strong>Bài kiểm tra 30 câu</strong> để được xác nhận hoàn thành.
+    </div>
+  `;
+}
+
+function pageSelfAssess(){
+  let rows = '';
+  COMPETENCY_GROUPS.forEach(g=>{
+    rows += `<div class="group-card">
+      <div class="group-head"><div class="group-num">${g.id}</div><div class="group-title">${g.title}</div></div>`;
+    g.items.forEach((it, idx)=>{
+      const key = g.id+'-'+idx;
+      rows += `<div class="assess-row">
+        <div class="assess-label">${it}</div>
+        <div class="seg" data-key="${key}">
+          <button class="sel-0" data-level="0">Chưa đạt</button>
+          <button class="sel-1" data-level="1">Đạt</button>
+          <button class="sel-2" data-level="2">Thành thạo</button>
+        </div>
+      </div>`;
+    });
+    rows += `</div>`;
+  });
+
+  return `
+    <p class="page-eyebrow"><span class="dot"></span>Phần III</p>
+    <h2 class="page-title">Phiếu tự đánh giá năng lực số cá nhân</h2>
+    <p class="lead">Chọn mức độ phù hợp nhất với bản thân cho từng nội dung. Đây là bước tự nhìn nhận trước khi làm bài kiểm tra chính thức — không ảnh hưởng đến kết quả kiểm tra.</p>
+    ${rows}
+    <div class="assess-summary">
+      <div>
+        <div style="font-size:12.5px;color:#B9D4DA;">Đã hoàn thành</div>
+        <div class="num" id="assessDone">0 / ${COMPETENCY_GROUPS.reduce((a,g)=>a+g.items.length,0)}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:12.5px;color:#B9D4DA;">Mức thành thạo trung bình</div>
+        <div class="num" id="assessAvg">—</div>
+      </div>
+    </div>
+  `;
+}
+
+function bindSelfAssess(){
+  document.querySelectorAll('.seg').forEach(seg=>{
+    const key = seg.dataset.key;
+    if(state.selfAssess[key] !== undefined){
+      seg.querySelector(`[data-level="${state.selfAssess[key]}"]`).classList.add('active');
+    }
+    seg.querySelectorAll('button').forEach(btn=>{
+      btn.onclick = ()=>{
+        seg.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        state.selfAssess[key] = parseInt(btn.dataset.level);
+        refreshAssessSummary();
+        scheduleSave();
+      };
+    });
+  });
+  refreshAssessSummary();
+}
+
+function refreshAssessSummary(){
+  const total = COMPETENCY_GROUPS.reduce((a,g)=>a+g.items.length,0);
+  const done = Object.keys(state.selfAssess).length;
+  document.getElementById('assessDone').textContent = `${done} / ${total}`;
+  if(done>0){
+    const avg = Object.values(state.selfAssess).reduce((a,b)=>a+b,0)/done;
+    const label = avg < 0.7 ? 'Chưa đạt' : avg < 1.6 ? 'Đạt' : 'Thành thạo';
+    document.getElementById('assessAvg').textContent = label;
+  }
+}
+
+function pageQuiz(){
+  const answeredCount = Object.keys(state.quizAnswers).length;
+  let qHtml = '';
+  QUESTIONS.forEach((q, i)=>{
+    qHtml += `<div class="qcard" id="qcard-${i}">
+      <span class="qnum">CÂU ${i+1} · NHÓM ${q.group}</span>
+      <p class="qtext">${q.q}</p>
+      ${q.opts.map((opt,oi)=>{
+        const letter = ['A','B','C','D'][oi];
+        return `<label class="opt" id="opt-${i}-${oi}" onclick="selectAnswer(${i},${oi})">
+          <input type="radio" name="q${i}" ${state.quizAnswers[i]===oi?'checked':''}>
+          <span class="letter">${letter}</span><span>${opt}</span>
+        </label>`;
+      }).join('')}
+    </div>`;
+  });
+
+  let resultHtml = '';
+  if(state.quizSubmitted){
+    const {correct, total, pct, pass} = gradeQuiz();
+    resultHtml = `<div class="result-banner">
+      <div>
+        <div style="font-size:12.5px;color:#B9D4DA;">Kết quả của bạn</div>
+        <div class="score ${pass?'pass':'fail'}">${correct}/${total} câu — ${pct}%</div>
+      </div>
+      <div style="text-align:right;display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+        <div style="font-size:13px;">${pass ? '✓ Đạt yêu cầu (≥ 70%)' : '✗ Chưa đạt yêu cầu (cần ≥ 70%)'}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+          <button class="btn btn-outline" style="border-color:rgba(255,255,255,0.4);color:#fff;" onclick="downloadResultFile();showToast('Đã tải file kết quả — gửi file này cho Phòng Công nghệ thông tin')">⬇ Tải file kết quả</button>
+          ${pass ? `<button class="btn" onclick="goTo('certificate')">Xem giấy xác nhận →</button>` : `<button class="btn btn-outline" style="border-color:rgba(255,255,255,0.4);color:#fff;" onclick="retryQuiz()">Làm lại bài kiểm tra</button>`}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  return `
+    <p class="page-eyebrow"><span class="dot"></span>Phần IV–V</p>
+    <h2 class="page-title">Bài kiểm tra đánh giá kỹ năng số</h2>
+    <p class="lead">30 câu hỏi trắc nghiệm, mỗi câu chọn 1 đáp án đúng nhất. Cần đạt từ 70% (21/30 câu) để được cấp Giấy xác nhận hoàn thành.</p>
+    <div class="quiz-meta">
+      <span>Đã trả lời: <b id="answeredCount">${answeredCount}</b> / 30</span>
+      <span>Yêu cầu đạt: <b>≥ 21/30 câu (70%)</b></span>
+    </div>
+    ${qHtml}
+    ${!state.quizSubmitted ? `<div class="quiz-submit-bar"><button class="btn" id="submitBtn" onclick="submitQuiz()">Nộp bài kiểm tra</button></div>` : ''}
+    ${resultHtml}
+  `;
+}
+
+function selectAnswer(qIdx, optIdx){
+  if(state.quizSubmitted) return;
+  state.quizAnswers[qIdx] = optIdx;
+  document.querySelectorAll(`#qcard-${qIdx} .opt`).forEach(o=>o.classList.remove('chosen'));
+  document.getElementById(`opt-${qIdx}-${optIdx}`).classList.add('chosen');
+  document.getElementById('answeredCount').textContent = Object.keys(state.quizAnswers).length;
+  scheduleSave();
+}
+
+function gradeQuiz(){
+  let correct = 0;
+  QUESTIONS.forEach((q,i)=>{ if(state.quizAnswers[i]===q.ans) correct++; });
+  const total = QUESTIONS.length;
+  const pct = Math.round((correct/total)*100);
+  return { correct, total, pct, pass: pct>=70 };
+}
+
+function submitQuiz(){
+  const answered = Object.keys(state.quizAnswers).length;
+  if(answered < QUESTIONS.length){
+    if(!confirm(`Bạn chỉ mới trả lời ${answered}/30 câu. Vẫn muốn nộp bài?`)) return;
+  }
+  state.quizSubmitted = true;
+  state.visited.add('quiz-done');
+  renderPage('quiz');
+  setTimeout(()=>{
+    const el = document.querySelector('.result-banner');
+    if(el && typeof el.scrollIntoView === 'function'){
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  }, 50);
+  clearTimeout(saveTimer);
+  setSync(true);
+  savePersonalProgress();
+  showToast('Đã lưu kết quả bài kiểm tra trên máy này');
+}
+
+function retryQuiz(){
+  state.quizAnswers = {};
+  state.quizSubmitted = false;
+  renderPage('quiz');
+  scheduleSave();
+}
+
+function bindQuiz(){
+  if(state.quizSubmitted){
+    QUESTIONS.forEach((q,i)=>{
+      q.opts.forEach((_,oi)=>{
+        const el = document.getElementById(`opt-${i}-${oi}`);
+        if(!el) return;
+        el.style.pointerEvents = 'none';
+        if(oi===q.ans) el.classList.add('correct');
+        else if(state.quizAnswers[i]===oi) el.classList.add('wrong');
+      });
+    });
+  }
+}
+
+function pageCertificate(){
+  const graded = state.quizSubmitted ? gradeQuiz() : null;
+  const eligible = graded && graded.pass;
+  return `
+    <p class="page-eyebrow"><span class="dot"></span>Phần VII</p>
+    <h2 class="page-title">Giấy xác nhận hoàn thành</h2>
+    <p class="lead">Cấp cho cán bộ, viên chức đạt yêu cầu bài kiểm tra (≥ 70%), làm căn cứ lưu hồ sơ phục vụ công tác quản lý, bồi dưỡng cán bộ theo Chỉ thị số 14/CT-TTg.</p>
+
+    ${eligible ? `
+      <div class="group-card" style="border-color:var(--mint);">
+        <div class="group-head"><div class="group-num" style="background:var(--mint);">✓</div><div class="group-title">Chúc mừng — bạn đã đạt yêu cầu!</div></div>
+        <p class="body-text" style="margin-top:10px;">Kết quả bài kiểm tra: <b>${graded.correct}/${graded.total} câu (${graded.pct}%)</b>.</p>
+        <p class="body-text"><b>Bước cuối để được cấp Giấy xác nhận chính thức:</b> tải file kết quả bên dưới rồi gửi qua email/Zalo nội bộ cho Phòng Công nghệ thông tin. Phòng CNTT sẽ tổng hợp và cấp Giấy xác nhận hoàn thành (có số hiệu, đóng dấu) lưu vào hồ sơ cán bộ.</p>
+        <button class="btn" onclick="downloadResultFile();showToast('Đã tải file kết quả — gửi file này cho Phòng Công nghệ thông tin')">⬇ Tải file kết quả để gửi CNTT</button>
+      </div>
+    ` : `
+      <div class="info-box" style="border-left-color:var(--red);">
+        ${graded ? `Bạn chưa đạt yêu cầu (${graded.correct}/${graded.total} câu, ${graded.pct}%). Hãy ôn lại các nhóm năng lực và <a href="#" onclick="retryQuiz();goTo('quiz');return false;" style="color:var(--red);font-weight:600;">làm lại bài kiểm tra</a>.` : `Bạn chưa làm bài kiểm tra. Hãy <a href="#" onclick="goTo('quiz');return false;" style="color:var(--teal);font-weight:600;">làm bài kiểm tra 30 câu</a> trước.`}
+      </div>
+    `}
+
+    <hr class="soft">
+    <div class="section-h"><span class="num">§</span>Mẫu giấy xác nhận (bản đầy đủ do bệnh viện cấp)</div>
+    <div class="info-box">
+      <strong>SỞ Y TẾ AN GIANG — ${HOSPITAL.toUpperCase()}</strong><br>
+      GIẤY XÁC NHẬN HOÀN THÀNH KIẾN THỨC, KỸ NĂNG SỐ CƠ BẢN<br><br>
+      Căn cứ Quyết định số 757/QĐ-BKHCN ngày 29/4/2025 và Chỉ thị số 14/CT-TTg ngày 22/4/2026, bệnh viện xác nhận Ông/Bà <i>(họ tên)</i>, khoa/phòng <i>(...)</i> đã hoàn thành chương trình tự học và đạt yêu cầu bài kiểm tra đánh giá kiến thức, kỹ năng số cơ bản.
+    </div>
+  `;
+}
+
+function pageContact(){
+  return `
+    <p class="page-eyebrow"><span class="dot"></span>Phần XI</p>
+    <h2 class="page-title">Kết luận & Liên hệ hỗ trợ</h2>
+    <p class="lead">Chuyển đổi số trong bệnh viện không chỉ phụ thuộc vào hệ thống công nghệ mà còn phụ thuộc vào năng lực số của mỗi cán bộ, viên chức.</p>
+
+    <ul class="bullets">
+      <li>Hiểu công nghệ.</li>
+      <li>Sử dụng công nghệ hiệu quả, đúng quy định.</li>
+      <li>Bảo vệ dữ liệu, thông tin người bệnh.</li>
+      <li>Chủ động cải tiến công việc bằng công nghệ số.</li>
+    </ul>
+    <p class="body-text">Sự tham gia tích cực, chủ động của toàn thể cán bộ, viên chức, người lao động là yếu tố quyết định để xây dựng <b>${HOSPITAL} hiện đại, thông minh, lấy người bệnh làm trung tâm.</b></p>
+
+    <div class="contact-card">
+      <h3>Cần hỗ trợ thêm?</h3>
+      <div class="contact-row">📍 <span>${CONTACT.org}</span></div>
+      <div class="contact-row">👤 <b>${CONTACT.name}</b></div>
+      <div class="contact-row">📞 <a href="tel:${CONTACT.phone}">${CONTACT.phone}</a></div>
+      <div class="contact-row">✉️ <a href="mailto:${CONTACT.email}">${CONTACT.email}</a></div>
+    </div>
+  `;
+}
+
+// ===================== ADMIN PAGE =====================
+function pageAdminLoading(){
+  return `
+    <p class="page-eyebrow"><span class="dot"></span>Quản trị</p>
+    <h2 class="page-title">Sổ theo dõi hoàn thành toàn viện</h2>
+    <p class="lead">Tải lên các file kết quả (.json) mà cán bộ, viên chức đã gửi về sau khi hoàn thành bài kiểm tra, để tổng hợp thành sổ theo dõi toàn viện.</p>
+    <div class="empty-state">Đang chuẩn bị khu vực tải file…</div>
+  `;
+}
+
+let adminRosterCache = [];   // entries imported from result files this session
+let adminFilter = { dept:'all', status:'all', search:'' };
+
+function loadAdminPage(){
+  renderAdminContent();
+}
+
+function renderAdminContent(){
+  const c = document.getElementById('content');
+  const data = filteredRoster();
+  const total = adminRosterCache.length;
+  const passCount = adminRosterCache.filter(r=>r.pass).length;
+  const failCount = total - passCount;
+  const avgPct = total ? Math.round(adminRosterCache.reduce((a,r)=>a+r.pct,0)/total) : 0;
+  const depts = Array.from(new Set(adminRosterCache.map(r=>r.dept))).sort();
+
+  let html = `
+    <p class="page-eyebrow"><span class="dot"></span>Quản trị</p>
+    <h2 class="page-title">Sổ theo dõi hoàn thành toàn viện</h2>
+    <p class="lead">Mỗi cán bộ, viên chức sau khi nộp bài sẽ tải một file kết quả (.json) và gửi về Phòng Công nghệ thông tin. Tải các file đó lên đây để tổng hợp thành sổ theo dõi toàn viện.</p>
+
+    <div class="info-box">
+      <strong>Cách dùng:</strong> nhận file .json qua email/Zalo từ các khoa, phòng → chọn tất cả file cùng lúc ở khung bên dưới → bảng tổng hợp sẽ tự cập nhật. Dữ liệu này chỉ tồn tại trong lần mở app hiện tại trên máy bạn — nhớ <b>xuất file CSV tổng hợp</b> để lưu lại trước khi đóng app.
+    </div>
+
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="fileInput" accept=".json" multiple style="display:none;">
+      <div class="dropzone-inner">
+        <div style="font-size:28px;margin-bottom:6px;">⬆</div>
+        <div style="font-weight:600;color:var(--navy-deep);margin-bottom:4px;">Kéo-thả file kết quả vào đây</div>
+        <div style="font-size:13px;color:var(--ink-soft);">hoặc <button class="btn btn-outline" id="chooseFileBtn" type="button" style="padding:6px 14px;font-size:13px;">chọn file từ máy</button></div>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Đã nhập</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:#0e5c4f;">${passCount}</div><div class="stat-label">Đạt yêu cầu</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--red);">${failCount}</div><div class="stat-label">Chưa đạt</div></div>
+      <div class="stat-card"><div class="stat-num">${avgPct}%</div><div class="stat-label">Điểm trung bình</div></div>
+    </div>
+
+    <div class="admin-toolbar">
+      <input type="text" id="adminSearch" placeholder="Tìm theo tên..." value="${adminFilter.search}">
+      <select id="adminDeptFilter">
+        <option value="all">Tất cả khoa/phòng</option>
+        ${depts.map(d=>`<option value="${escapeHtml(d)}" ${adminFilter.dept===d?'selected':''}>${escapeHtml(d)}</option>`).join('')}
+      </select>
+      <select id="adminStatusFilter">
+        <option value="all" ${adminFilter.status==='all'?'selected':''}>Tất cả kết quả</option>
+        <option value="pass" ${adminFilter.status==='pass'?'selected':''}>Đạt</option>
+        <option value="fail" ${adminFilter.status==='fail'?'selected':''}>Chưa đạt</option>
+      </select>
+      <button class="btn btn-outline" id="adminClear">🗑 Xóa hết</button>
+    </div>
+    <div class="admin-toolbar">
+      <button class="btn btn-outline" id="adminExportCsv">⬇ CSV tổng hợp</button>
+      <button class="btn" id="adminExportExcel">⬇ Excel tổng hợp (.xls)</button>
+      <button class="btn btn-outline" id="adminExportWordAll">⬇ Word từng người (minh chứng)</button>
+    </div>
+  `;
+
+  if(total === 0){
+    html += `<div class="empty-state">Chưa có file kết quả nào được nhập. Hãy tải file .json từ cán bộ, viên chức vào khung phía trên.</div>`;
+  } else if(data.length === 0){
+    html += `<div class="empty-state">Không có kết quả phù hợp với bộ lọc hiện tại.</div>`;
+  } else {
+    html += `
+      <div style="overflow-x:auto;">
+      <table class="roster">
+        <tr><th>Họ và tên</th><th>Khoa/phòng</th><th>Chức danh</th><th>Điểm</th><th>Tỷ lệ</th><th>Kết quả</th><th>Nộp bài lúc</th><th>Minh chứng</th><th></th></tr>
+        ${data.map((r,i)=>`
+          <tr>
+            <td>${escapeHtml(r.name)}</td>
+            <td>${escapeHtml(r.dept)}</td>
+            <td>${escapeHtml(r.role||'—')}</td>
+            <td>${r.correct}/${r.total}</td>
+            <td>${r.pct}%</td>
+            <td><span class="badge ${r.pass?'pass':'fail'}">${r.pass?'Đạt':'Chưa đạt'}</span></td>
+            <td class="mono" style="font-size:12px;color:var(--ink-soft);">${formatDate(r.submittedAt)}</td>
+            <td><button class="btn btn-outline" style="padding:5px 10px;font-size:12px;" onclick="exportPersonReportWord(${r.__idx})">📄 Word</button></td>
+            <td><button class="logout-btn" style="color:var(--red);" onclick="removeRosterEntry(${r.__idx})" title="Xóa">✕</button></td>
+          </tr>
+        `).join('')}
+      </table>
+      </div>
+    `;
+  }
+
+  c.innerHTML = html;
+  bindAdminControls();
+}
+
+function filteredRoster(){
+  return adminRosterCache
+    .map((r,idx)=>Object.assign({}, r, {__idx:idx}))
+    .filter(r=>{
+      if(adminFilter.dept!=='all' && r.dept!==adminFilter.dept) return false;
+      if(adminFilter.status==='pass' && !r.pass) return false;
+      if(adminFilter.status==='fail' && r.pass) return false;
+      if(adminFilter.search && !r.name.toLowerCase().includes(adminFilter.search.toLowerCase())) return false;
+      return true;
+    })
+    .sort((a,b)=> new Date(b.submittedAt) - new Date(a.submittedAt));
+}
+
+function removeRosterEntry(idx){
+  adminRosterCache.splice(idx, 1);
+  renderAdminContent();
+}
+
+function bindAdminControls(){
+  const search = document.getElementById('adminSearch');
+  const deptSel = document.getElementById('adminDeptFilter');
+  const statusSel = document.getElementById('adminStatusFilter');
+  const clearBtn = document.getElementById('adminClear');
+  const exportCsvBtn = document.getElementById('adminExportCsv');
+  const exportExcelBtn = document.getElementById('adminExportExcel');
+  const exportWordAllBtn = document.getElementById('adminExportWordAll');
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+  const chooseBtn = document.getElementById('chooseFileBtn');
+
+  if(search) search.oninput = (e)=>{ adminFilter.search = e.target.value; renderAdminContent(); document.getElementById('adminSearch').focus(); };
+  if(deptSel) deptSel.onchange = (e)=>{ adminFilter.dept = e.target.value; renderAdminContent(); };
+  if(statusSel) statusSel.onchange = (e)=>{ adminFilter.status = e.target.value; renderAdminContent(); };
+  if(clearBtn) clearBtn.onclick = ()=>{
+    if(adminRosterCache.length===0) return;
+    if(confirm('Xóa toàn bộ dữ liệu đã nhập trong phiên này? (file gốc trên máy nhân viên không bị ảnh hưởng)')){
+      adminRosterCache = [];
+      renderAdminContent();
+    }
+  };
+  if(exportCsvBtn) exportCsvBtn.onclick = exportRosterCSV;
+  if(exportExcelBtn) exportExcelBtn.onclick = exportRosterExcel;
+  if(exportWordAllBtn) exportWordAllBtn.onclick = exportAllPersonReportsWord;
+  if(chooseBtn) chooseBtn.onclick = ()=>fileInput.click();
+  if(fileInput) fileInput.onchange = (e)=>handleResultFiles(e.target.files);
+
+  if(dropzone){
+    ['dragenter','dragover'].forEach(evt=>dropzone.addEventListener(evt, e=>{
+      e.preventDefault(); dropzone.classList.add('drag');
+    }));
+    ['dragleave','drop'].forEach(evt=>dropzone.addEventListener(evt, e=>{
+      e.preventDefault(); dropzone.classList.remove('drag');
+    }));
+    dropzone.addEventListener('drop', e=>{
+      if(e.dataTransfer && e.dataTransfer.files) handleResultFiles(e.dataTransfer.files);
+    });
+  }
+}
+
+function handleResultFiles(fileList){
+  const files = Array.from(fileList || []).filter(f=>f.name.endsWith('.json'));
+  if(files.length===0){
+    showToast('Vui lòng chọn file .json do app xuất ra');
+    return;
+  }
+  let okCount = 0, dupCount = 0, errCount = 0;
+  let pending = files.length;
+  files.forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      try{
+        const data = JSON.parse(reader.result);
+        if(data.type !== 'sotay_ky_nang_so_result'){
+          errCount++;
+        } else {
+          const key = slugify(data.name) + '__' + slugify(data.dept);
+          const existingIdx = adminRosterCache.findIndex(r => (slugify(r.name)+'__'+slugify(r.dept)) === key);
+          if(existingIdx >= 0){
+            if(new Date(data.submittedAt) > new Date(adminRosterCache[existingIdx].submittedAt)){
+              adminRosterCache[existingIdx] = data;
+            }
+            dupCount++;
+          } else {
+            adminRosterCache.push(data);
+            okCount++;
+          }
+        }
+      }catch(e){
+        errCount++;
+      }
+      pending--;
+      if(pending===0){
+        renderAdminContent();
+        let msg = `Đã nhập ${okCount} kết quả mới`;
+        if(dupCount) msg += `, cập nhật ${dupCount} bản ghi trùng`;
+        if(errCount) msg += `, ${errCount} file lỗi/không hợp lệ`;
+        showToast(msg);
+      }
+    };
+    reader.onerror = ()=>{ pending--; errCount++; };
+    reader.readAsText(file);
+  });
+}
+
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function formatDate(iso){
+  try{
+    const d = new Date(iso);
+    return d.toLocaleString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  }catch(e){ return '—'; }
+}
+
+function exportRosterCSV(){
+  try{
+    if(adminRosterCache.length===0){ showToast('Chưa có dữ liệu để xuất'); return; }
+    const rows = [['Họ và tên','Khoa/phòng','Chức danh','Số câu đúng','Tổng số câu','Tỷ lệ (%)','Kết quả','Nộp bài lúc']];
+    filteredRoster().forEach(r=>{
+      rows.push([r.name, r.dept, r.role||'', r.correct, r.total, r.pct, r.pass?'Đạt':'Chưa đạt', formatDate(r.submittedAt)]);
+    });
+    const csv = rows.map(row=>row.map(cell=>`"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'so_theo_doi_ky_nang_so_' + new Date().toISOString().slice(0,10) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }catch(e){
+    console.error('Lỗi xuất CSV', e);
+    showToast('Không thể xuất file trong môi trường này. Hãy thử trên trình duyệt Chrome/Edge.');
+  }
+}
+
+// ===================== XUẤT EXCEL TỔNG HỢP (.xls) =====================
+function exportRosterExcel(){
+  try{
+    if(adminRosterCache.length===0){ showToast('Chưa có dữ liệu để xuất'); return; }
+    const data = filteredRoster();
+    const total = adminRosterCache.length;
+    const passCount = adminRosterCache.filter(r=>r.pass).length;
+    const avgPct = total ? Math.round(adminRosterCache.reduce((a,r)=>a+r.pct,0)/total) : 0;
+
+    const styles = `
+      <style>
+        table{border-collapse:collapse;font-family:Calibri,Arial,sans-serif;}
+        th{background:#0B3954;color:#ffffff;font-weight:bold;padding:8px 10px;border:1px solid #0B3954;text-align:center;font-size:12px;}
+        td{padding:7px 10px;border:1px solid #D8E0E3;font-size:12px;}
+        .title{font-size:18px;font-weight:bold;color:#0B3954;}
+        .sub{font-size:12px;color:#5A6B75;}
+        .pass{color:#0e5c4f;font-weight:bold;background:#DCEFE9;}
+        .fail{color:#a32d2d;font-weight:bold;background:#FBEAE8;}
+        .statbox{background:#F5F7F8;padding:10px;border:1px solid #D8E0E3;font-weight:bold;text-align:center;font-size:13px;}
+      </style>`;
+
+    let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head><meta charset="UTF-8">${styles}
+    <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
+    <x:Name>So theo doi</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+    </x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+    </head><body>
+    <div class="title">SỔ THEO DÕI HOÀN THÀNH KIẾN THỨC, KỸ NĂNG SỐ CƠ BẢN</div>
+    <div class="sub">${HOSPITAL} — Theo Quyết định số 757/QĐ-BKHCN và Chỉ thị số 14/CT-TTg</div>
+    <div class="sub">Xuất lúc: ${formatDate(new Date().toISOString())}</div>
+    <br>
+    <table><tr>
+      <td class="statbox">Tổng số đã nộp bài<br>${total}</td>
+      <td class="statbox">Đạt yêu cầu<br>${passCount}</td>
+      <td class="statbox">Chưa đạt<br>${total-passCount}</td>
+      <td class="statbox">Điểm trung bình<br>${avgPct}%</td>
+    </tr></table>
+    <br>
+    <table>
+      <tr><th>STT</th><th>Họ và tên</th><th>Khoa/phòng</th><th>Chức danh</th><th>Số câu đúng</th><th>Tổng số câu</th><th>Tỷ lệ (%)</th><th>Kết quả</th><th>Nộp bài lúc</th></tr>
+      ${data.map((r,i)=>`
+        <tr>
+          <td style="text-align:center;">${i+1}</td>
+          <td>${escapeHtml(r.name)}</td>
+          <td>${escapeHtml(r.dept)}</td>
+          <td>${escapeHtml(r.role||'')}</td>
+          <td style="text-align:center;">${r.correct}</td>
+          <td style="text-align:center;">${r.total}</td>
+          <td style="text-align:center;">${r.pct}</td>
+          <td class="${r.pass?'pass':'fail'}" style="text-align:center;">${r.pass?'Đạt':'Chưa đạt'}</td>
+          <td>${formatDate(r.submittedAt)}</td>
+        </tr>
+      `).join('')}
+    </table>
+    </body></html>`;
+
+    const blob = new Blob(['\uFEFF'+html], {type:'application/vnd.ms-excel;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'so_theo_doi_ky_nang_so_' + new Date().toISOString().slice(0,10) + '.xls';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }catch(e){
+    console.error('Lỗi xuất Excel', e);
+    showToast('Không thể xuất file Excel trong môi trường này.');
+  }
+}
+
+// ===================== XUẤT BÁO CÁO WORD TỪNG NGƯỜI (.doc) - làm minh chứng =====================
+function exportPersonReportWord(idx){
+  try{
+    const r = adminRosterCache[idx];
+    if(!r){ showToast('Không tìm thấy dữ liệu'); return; }
+
+    const groupLabel = (g)=> (COMPETENCY_GROUPS.find(x=>x.id===g)||{}).title || '';
+    let answerRows = '';
+    if(r.answers && Object.keys(r.answers).length > 0){
+      QUESTIONS.forEach((q,i)=>{
+        const chosen = r.answers[i];
+        const isCorrect = chosen === q.ans;
+        const letters = ['A','B','C','D'];
+        answerRows += `<tr>
+          <td style="text-align:center;">${i+1}</td>
+          <td style="font-size:11px;">${escapeHtml(q.q)}</td>
+          <td style="text-align:center;">${groupLabel(q.group)}</td>
+          <td style="text-align:center;">${chosen!==undefined ? letters[chosen] : '—'}</td>
+          <td style="text-align:center;">${letters[q.ans]}</td>
+          <td style="text-align:center;color:${isCorrect?'#0e5c4f':'#a32d2d'};font-weight:bold;">${isCorrect?'Đúng':'Sai'}</td>
+        </tr>`;
+      });
+    }
+
+    const styles = `
+      <style>
+        body{font-family:'Times New Roman',serif;font-size:13pt;color:#222;}
+        .center{text-align:center;}
+        .bold{font-weight:bold;}
+        table{border-collapse:collapse;width:100%;margin-top:10px;}
+        th{background:#0B3954;color:#fff;padding:6px 8px;font-size:10pt;border:1px solid #0B3954;}
+        td{padding:5px 8px;border:1px solid #999;font-size:10pt;}
+        .resultbox{margin:18px 0;padding:14px;border:2px solid #0B3954;text-align:center;font-size:14pt;font-weight:bold;}
+        .pass-text{color:#0e5c4f;}
+        .fail-text{color:#a32d2d;}
+        .sig{margin-top:40px;text-align:center;}
+        .header-table{width:100%;margin-bottom:14px;}
+        .header-table td{border:none;padding:0;font-size:12pt;}
+      </style>`;
+
+    const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+    <head><meta charset="UTF-8">${styles}</head>
+    <body>
+      <table class="header-table"><tr>
+        <td class="bold">SỞ Y TẾ AN GIANG</td>
+        <td class="bold center">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</td>
+      </tr><tr>
+        <td class="bold">${HOSPITAL.toUpperCase()}</td>
+        <td class="center">Độc lập - Tự do - Hạnh phúc</td>
+      </tr></table>
+
+      <p class="center bold" style="font-size:16pt;margin-top:24px;">BÁO CÁO KẾT QUẢ</p>
+      <p class="center bold" style="font-size:14pt;">BÀI KIỂM TRA ĐÁNH GIÁ KIẾN THỨC, KỸ NĂNG SỐ CƠ BẢN</p>
+      <p class="center" style="font-style:italic;font-size:11pt;">(Minh chứng cá nhân — căn cứ Quyết định số 757/QĐ-BKHCN và Chỉ thị số 14/CT-TTg)</p>
+
+      <table class="header-table" style="margin-top:24px;">
+        <tr><td style="width:30%;" class="bold">Họ và tên:</td><td>${escapeHtml(r.name)}</td></tr>
+        <tr><td class="bold">Khoa/phòng:</td><td>${escapeHtml(r.dept)}</td></tr>
+        <tr><td class="bold">Chức danh:</td><td>${escapeHtml(r.role||'—')}</td></tr>
+        <tr><td class="bold">Thời điểm nộp bài:</td><td>${formatDate(r.submittedAt)}</td></tr>
+      </table>
+
+      <div class="resultbox ${r.pass?'pass-text':'fail-text'}">
+        Kết quả: ${r.correct}/${r.total} câu đúng (${r.pct}%) — ${r.pass ? 'ĐẠT YÊU CẦU' : 'CHƯA ĐẠT YÊU CẦU'}
+      </div>
+
+      ${answerRows ? `
+      <p class="bold">Chi tiết bài làm:</p>
+      <table>
+        <tr><th>Câu</th><th>Nội dung câu hỏi</th><th>Nhóm năng lực</th><th>Đáp án chọn</th><th>Đáp án đúng</th><th>Kết quả</th></tr>
+        ${answerRows}
+      </table>` : '<p style="font-style:italic;color:#666;">Không có dữ liệu chi tiết bài làm (file kết quả không kèm đáp án).</p>'}
+
+      <div class="sig">
+        <p style="font-style:italic;">An Giang, ngày …… tháng …… năm 2026</p>
+        <p class="bold">XÁC NHẬN CỦA PHÒNG CÔNG NGHỆ THÔNG TIN</p>
+        <p style="font-style:italic;font-size:11pt;">(Ký, ghi rõ họ tên)</p>
+      </div>
+    </body></html>`;
+
+    const blob = new Blob(['\uFEFF'+html], {type:'application/msword;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'baocao_' + slugify(r.name) + '__' + slugify(r.dept) + '.doc';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }catch(e){
+    console.error('Lỗi xuất báo cáo Word', e);
+    showToast('Không thể xuất file Word trong môi trường này.');
+  }
+}
+
+function exportAllPersonReportsWord(){
+  const data = filteredRoster();
+  if(data.length===0){ showToast('Chưa có dữ liệu để xuất'); return; }
+  if(data.length > 5 && !confirm(`Sẽ tải xuống ${data.length} file Word riêng biệt (mỗi người 1 file). Tiếp tục?`)) return;
+  data.forEach((r, i)=>{
+    setTimeout(()=>exportPersonReportWord(r.__idx), i*250);
+  });
+  showToast(`Đang xuất ${data.length} báo cáo Word...`);
+}
+
+// ===================== LOGIN / SESSION =====================
+function initials(name){
+  const parts = (name||'').trim().split(/\s+/);
+  if(parts.length===0 || !parts[0]) return '··';
+  const last = parts[parts.length-1];
+  return (last[0]||'').toUpperCase() + (parts.length>1 ? (parts[0][0]||'').toUpperCase() : '');
+}
+
+function applyUserToUI(){
+  document.getElementById('userNameDisplay').textContent = state.user.name;
+  document.getElementById('userDeptDisplay').textContent = state.user.dept + (state.user.role ? ' · ' + state.user.role : '');
+  document.getElementById('userAvatar').textContent = initials(state.user.name);
+}
+
+function loginWithUser(user){
+  state.user = user;
+
+  // Chuyển màn hình NGAY LẬP TỨC — không chờ bất kỳ thao tác lưu trữ nào.
+  // Đảm bảo app luôn dùng được dù trình duyệt/webview chặn hoặc làm treo localStorage
+  // (ví dụ webview trong Zalo/Gmail mở file trực tiếp không qua trình duyệt thật).
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appRoot').style.display = '';
+  applyUserToUI();
+
+  let prev = null;
+  try{
+    saveLastUser(user);
+    prev = loadPersonalProgress(user.name, user.dept);
+  }catch(e){
+    console.error('Lỗi truy cập bộ nhớ lưu trữ, tiếp tục dùng app không lưu trữ', e);
+  }
+
+  if(prev){
+    state.selfAssess = prev.selfAssess || {};
+    state.quizAnswers = prev.quizAnswers || {};
+    state.quizSubmitted = !!prev.quizSubmitted;
+    state.visited = new Set(prev.visited || []);
+  }
+  setSync(false);
+  const firstUnread = PAGES.find(p => p.id !== 'admin' && !state.visited.has(p.id));
+  goTo(firstUnread ? firstUnread.id : 'intro');
+  if(prev) showToast('Đã khôi phục tiến độ học tập trước đó của bạn trên máy này');
+}
+
+function logout(){
+  if(!confirm('Đổi người dùng? Tiến độ của bạn đã được lưu trên máy này, lần sau nhập lại đúng tên + khoa/phòng sẽ khôi phục được.')) return;
+  state.user = null;
+  state.selfAssess = {};
+  state.quizAnswers = {};
+  state.quizSubmitted = false;
+  state.visited = new Set();
+  document.getElementById('appRoot').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  closeSidebar();
+}
+
+document.getElementById('logoutBtn').onclick = logout;
+
+// ==== KIỂM TRA HỢP LỆ THÔNG TIN ĐĂNG NHẬP (chống nhập 'abc', thông tin giả) ====
+function isGibberish(s){
+  const t = (s||'').toLowerCase().replace(/\s+/g,'');
+  if(t.length < 2) return true;
+  if(/^(.)\1+$/.test(t)) return true;                 // 1 ký tự lặp lại: aaaa
+  const bad = ['abc','abcd','abcde','abcdef','xyz','asd','asdf','asdfgh','qwe','qwer',
+               'qwerty','zxc','zxcv','test','aaa','bbb','ccc','ddd','eee','xxx','yyy','zzz',
+               'aaaa','bbbb','cccc','no','none','na','nan','aa','bb','cc'];
+  if(bad.includes(t)) return true;
+  if(/^[a-z]+$/.test(t) && !/[aeiouy]/.test(t)) return true; // chuỗi latin không có nguyên âm
+  return false;
+}
+const VN_LETTERS = "a-zA-ZàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴĐ";
+function validateName(name){
+  if(!name) return 'Vui lòng nhập họ và tên';
+  if(name.length < 3) return 'Họ và tên quá ngắn';
+  if(!(new RegExp('^['+VN_LETTERS+'\\s]+$')).test(name))
+    return 'Họ và tên chỉ gồm chữ cái, không chứa số hay ký tự đặc biệt';
+  if(name.split(/\s+/).filter(Boolean).length < 2)
+    return 'Vui lòng nhập đầy đủ cả họ và tên (ít nhất 2 từ)';
+  if(isGibberish(name)) return 'Họ và tên không hợp lệ, vui lòng nhập đúng tên thật';
+  return '';
+}
+function validateDept(dept){
+  if(!dept) return 'Vui lòng nhập khoa/phòng';
+  if(dept.length < 3) return 'Tên khoa/phòng quá ngắn';
+  if(!(new RegExp('['+VN_LETTERS+']')).test(dept)) return 'Khoa/phòng phải chứa chữ cái';
+  if(isGibberish(dept)) return 'Tên khoa/phòng không hợp lệ, vui lòng nhập đúng';
+  return '';
+}
+function validateRole(role){
+  if(!role) return 'Vui lòng chọn chức danh';
+  return '';
+}
+function setFieldError(inputId, errId, msg){
+  const inp = document.getElementById(inputId);
+  const err = document.getElementById(errId);
+  if(!inp) return;
+  if(msg){
+    inp.classList.add('invalid');
+    if(err){ err.textContent = msg; err.style.display = 'block'; }
+  } else {
+    inp.classList.remove('invalid');
+    if(err){ err.textContent = ''; err.style.display = 'none'; }
+  }
+}
+
+document.getElementById('loginBtn').onclick = ()=>{
+  const name = document.getElementById('inputName').value.trim();
+  const dept = document.getElementById('inputDept').value.trim();
+  const role = document.getElementById('inputRole').value;
+  const eName = validateName(name);
+  const eDept = validateDept(dept);
+  const eRole = validateRole(role);
+  setFieldError('inputName','errName',eName);
+  setFieldError('inputDept','errDept',eDept);
+  setFieldError('inputRole','errRole',eRole);
+  if(eName){ document.getElementById('inputName').focus(); return; }
+  if(eDept){ document.getElementById('inputDept').focus(); return; }
+  if(eRole){ document.getElementById('inputRole').focus(); return; }
+  loginWithUser({ name, dept, role });
+};
+
+// Enter để đăng nhập + tự ẩn lỗi khi người dùng bắt đầu sửa
+['inputName','inputDept'].forEach(id=>{
+  const el = document.getElementById(id);
+  el.addEventListener('keydown', e=>{
+    if(e.key==='Enter') document.getElementById('loginBtn').click();
+  });
+  el.addEventListener('input', ()=> setFieldError(id, id==='inputName'?'errName':'errDept',''));
+});
+document.getElementById('inputRole').addEventListener('change', ()=> setFieldError('inputRole','errRole',''));
+
+// ===================== INIT =====================
+(function init(){
+ try{
+  // Nhận diện trình duyệt đang chạy bên trong app khác (Zalo, Messenger, Facebook, Gmail...)
+  // Các webview này thường chặn hoặc làm gián đoạn localStorage và một số API trình duyệt,
+  // khiến nút bấm có vẻ "không phản hồi".
+  try{
+    const ua = navigator.userAgent || '';
+    const isInAppWebview = /Zalo|FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\//i.test(ua)
+      || /; wv\)/i.test(ua); // Android WebView generic marker
+    if(isInAppWebview){
+      const warn = document.getElementById('webviewWarning');
+      if(warn) warn.style.display = 'block';
+    }
+  }catch(e){ /* không chặn app nếu việc nhận diện lỗi */ }
+
+  if(!storageAvailable()){
+    const note = document.querySelector('.login-note');
+    if(note){
+      note.innerHTML = '<span style="color:var(--red);font-weight:600;">⚠ Không phát hiện bộ nhớ lưu trữ trên trình duyệt này.</span> Bạn vẫn có thể đọc sổ tay và làm bài kiểm tra, nhưng tiến độ sẽ <b>không được lưu lại</b> giữa các lần mở. Hãy mở file bằng Chrome/Edge/Firefox (không phải chế độ ẩn danh) để dùng đầy đủ tính năng lưu trữ trên máy.';
+    }
+  }
+  const last = loadLastUser();
+  if(last && last.name && last.dept){
+    document.getElementById('inputName').value = last.name;
+    document.getElementById('inputDept').value = last.dept;
+    if(last.role) document.getElementById('inputRole').value = last.role;
+  }
+ }catch(e){
+   console.error('Lỗi trong quá trình khởi tạo app, một số tính năng phụ có thể không hoạt động', e);
+ }finally{
+   // Luôn đánh dấu app đã khởi tạo xong (dù có lỗi ở tính năng phụ nào),
+   // để watchdog không hiện cảnh báo sai khi app thực ra đã chạy được.
+   window.__appReady = true;
+ }
+})();
+</script>
+</body>
+</html>
